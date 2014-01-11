@@ -89,7 +89,7 @@ function checkIdeas() {
     
     if (developerUnlocked == true) {
 	developerBuySellContainer = document.getElementById('developerBuySell');
-	developerBuySellContainer.addEventListener('click', onDevClick, false);
+	//developerBuySellContainer.addEventListener('click', onChoiceClick, false);
 
 	developerBuySellContainer.innerHTML = '';
 	var buyDev = document.createElement('button');
@@ -127,24 +127,21 @@ function onChoiceClick(ev) {
 	bullshit -= ideaCost;
 	ideaCost += 5;
     }
-}
 
-function onDevClick(ev) {
-    console.log(ev.target.dataset.buttonchosen);
     if (ev.target.dataset.buttonchosen = 'buyDev') {
 	if (bullshit > developerCost) {
 	    bullshit -= developerCost;
 	    alert("bullshit is "+bullshit + "dev cost is " + developerCost);
 	    developer = developer + 1;
 	    alert("developers: "+developer);
-	}
+		}
     }
 
     if (ev.target.dataset.buttonchosen = 'sellDev') {
 	if (developer > 0) {
 	    //developer--; 
 	    alert("developer: "+developer);
-	}
+		}
     }
 }
 
@@ -155,7 +152,7 @@ var sellProductManagerButton = document.getElementById('sellProductManagerButton
 sellProductManagerButton.addEventListener('click', sellProductManager, false);
 
 developerBuySellContainer = document.getElementById('developerBuySell');
-developerBuySellContainer.addEventListener('click', onDevClick, false);
+developerBuySellContainer.addEventListener('click', onChoiceClick, false);
 ideasContainer = document.getElementById('ideaChoices');
 ideasContainer.addEventListener('click', onChoiceClick, false);
 

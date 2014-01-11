@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+	//resources
+	var bullshit = 0;
+	var code = 0;
+	var money = 20000;
+	var maintenance = 0;
+
+	//resource generators
+	var product = 0;
+	var developer = 0;
+	var productRate = 0.05;
+	var developerRate = 0.10;
+
+	//cost of next resource
+	var productCost = (product+1)*1.5;
+	var developerCost = (developer+1)*2;
+	var ideaCost = 5;
+	var incomeProducts = 0;
+
+	//
+	var ideasContainer = null;
+	var developerBuySellContainer = null;
+	var developerUnlocked = false;
+	var productUnlocked = false;
+	var canReleaseProduct = false;
+	var hasProduct = false;
+
+	//stop timer if player loses
+	var timer = 1000;
+
+	function printEconomy() {
+		updateEconomy();
+		updateVisibilityButtons(); //show/hide buttons depending on boolean status
+		if (developerUnlocked == false) {
+			document.getElementById('playerEconomy').innerHTML = "<b>Economy</b></br>Lines of Bullshit: " + bullshit +"</br></p>";
+			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + product +" </br></br>Maintenance Cost: " + maintenance + "</br>";
+		}
+		else {
+			document.getElementById('playerEconomy').innerHTML = "<b>Economy</b></br>Lines of Bullshit: " + bullshit +"</br>Lines of Code: " + code +"</p>";
+			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + product +" </br>Developers: " + developer + "</br></br>Maintenance Cost: " + maintenance + "</br>";
+		}
+		checkIdeas();
+	}
+
+	function updateEconomy() {
+		//update costs
+		productCost = (product+1)*1.5;
+		developerCost = (developer+1)*2;
+		//update economy
+		bullshit += product*productRate;
+		code += developer*developerRate;
+		maintenance = (product*1.5) + (developer*3);
+		money -= maintenance;
+
+		if (money < 0) {
+			alert("You LOSE!");
+			timer = 0;
+		}
+	}
+	function updateVisibilityButtons() {
+		if (developerUnlocked == true) {
+			document.getElementById('buyDevBtn').style.visibility = 'visible';
+			document.getElementById('sellDevBtn').style.visibility = 'visible';
+		}
+		if (productUnlocked == true) {
+			document.getElementById('relProductBtn').style.visibility = 'visible';
+		}
+		if (hasProduct == true) {
+			document.getElementById('canProductBtn').style.visibility = 'visible';
+		}
+
+	}
+
+	function buyProductManager(){
+		if (money > productCost) {
+			money -= productCost;
+			product++;
+		}
+	}
+
+	function sellProductManager() {
+		if (product > 0) {
+			product--;
+		}
+	}
+
+	function buyDeveloper(){
+		if (bullshit > developerCost) {
+			bullshit -= developerCost;
+			developer++;
+		}
+	}
+
+	function sellDeveloper() {
+		if (developer > 0) {
+			developer--;
+		}
+	}
+
+	function releaseProduct() {
+
+	}
+
+	function cancelProduct() {
+
+	}
+
+	function checkIdeas() {
+		if (bullshit > ideaCost) {
+			document.getElementById('startProductBtn').style.visibility = 'visible';
+		}
+	}
+
+	function createProduct() {
+		developerUnlocked = true;
+		bullshit -= ideaCost;
+		ideaCost += 5;
+	}
+
+	//once idea has been chosen, unlock new resource generator -> developer. Dev makes new source: lines of code
+	//lines of code used to complete ideas
+	//completed ideas give randomised bonus to money and incomeProducts but then increase maintenance cost
+	//after first product, unlock maintenance tech tree (outsourcing)
+	//buying more outsource costs money but reduces maintenance
+	//if product is a successful one when income products > maintenance cost
+
+	//future: ABTest product -> randomise incomeProduct, randomise maintenance cost
+	//product + developer cap -> increase building size to increase population
+</script>
+
+</head>
+<body>
+<p id="playerEconomy"><b>Economy</b></br>
+Lines of Bullshit: 0  </br>
+</p>
+
+<p id="playerGenerators"><b>Eric GmbH</b> </br>
+Money: 0 </br>
+Product Managers: 0  </br>
+Maintenance Cost: 0 </br>
+</p>
+
+<button type="button" onclick="buyProductManager()">+1 PM</button>
+<button type="button" onclick="sellProductManager()">-1 PM</button>
+<button type="button" id="buyDevBtn" onclick="buyDeveloper()" style="visibility:hidden">+1 DEV</button>
+<button type="button" id="sellDevBtn"onclick="sellDeveloper()" style="visibility:hidden">-1 DEV</button>
+<p>
+<button type="button" id="startProductBtn"onclick="createProduct()" style="visibility:hidden">Create F2P game</button>
+<button type="button" id="relProductBtn"onclick="releaseProduct()" style="visibility:hidden">Release F2P game</button>
+<button type="button" id="canProductBtn"onclick="cancelProduct()" style="visibility:hidden">Cancel F2P game</button>
+<script>
+	setInterval(printEconomy,timer);
+</script>
+
+</body>
+</html>
