@@ -8,7 +8,7 @@
 	var code = 0;
 	var money = 20000;
 	var maintenance = 0;
-	var numberOfProduct = [{"name":"test1","capital":0,"incomeRate":0,"maintenanceCost":0}]; //numberOfProduct[0]
+	var arrayOfProduct = [];
 
 	//resource generators
 	var productManager = 0;
@@ -46,9 +46,9 @@
 			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + productManager +" </br>Developers: " + developer + "</br></br>Wages Cost: " + maintenance + "</br>";
 			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +"</br>Next Dev costs: " + developerCost +" bullshit.</br>";
 		}
-
 		if (hasProduct == true) {
-			document.getElementById('productListing').innerHTML = "show products here"; //list array
+			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +"</br>Next Dev costs: " + developerCost +" bullshit.</br>" + "Income: " + incomeFromProducts + "</br>";
+			document.getElementById('productListing').innerHTML = printArrayNicely(arrayOfProduct); //list array
 		}
 	}
 
@@ -67,6 +67,11 @@
 			timer = 0;
 		}
 	}
+
+	function printArrayNicely(arrayOfProduct) {
+			return JSON.stringify(arrayOfProduct);
+	}
+
 	function updateVisibilityButtons() {
 		if (developerUnlocked == true) {
 			document.getElementById('buyDevBtn').style.visibility = 'visible';
@@ -130,21 +135,26 @@
 	function releaseProduct() {
 		if (code > finishedProductCost) {
 			code -= finishedProductCost;
-			var i = numberOfProduct.length;
-			numberOfProduct[i] = {"name":"test"+i,"capital":(Math.floor(Math.random()*10)+1),"incomeRate":(Math.floor(Math.random()*5)+1),"maintenanceCost":(Math.floor(Math.random()*10)+1)} //1-10
+			var i = arrayOfProduct.length;
+			arrayOfProduct[i] = {"name":"Game "+i,"capital":(Math.floor(Math.random()*1000)+1),"incomeRate":(Math.floor(Math.random()*20)+1),"maintenanceCost":(Math.floor(Math.random()*12)+1)};
 			creatingProduct = false;
 			hasProduct = true;
-			alert(numberOfProduct);
 			finishedProductCost += 5;
+			//add income and maintenance 
+			incomeFromProducts += arrayOfProduct[i].incomeRate;
+			maintenance += arrayOfProduct[i].maintenanceCost;
 		}
 	}
 
 	function cancelProduct() {
 		//you should be able to cancel any product you want, for prototype just remove last product
-		if (numberOfProduct > 0) {
-			var i = numberOfProduct.length-1;
-			numberOfProduct = numberOfProduct.splice(i,1);
-			alert(numberOfProduct);
+		if (arrayOfProduct.length > 0) {
+			var i = arrayOfProduct.length;
+			//remove the maintenance cost and income rate
+			incomeFromProducts -= arrayOfProduct[i].incomeRate;
+			maintenance -= arrayOfProduct[i].maintenanceCost;
+			//remove from array
+			arrayOfProduct = arrayOfProduct.splice(i,1);
 			finishedProductCost -= 5;
 		}	
 	}
@@ -182,11 +192,11 @@ Wages Cost: 0 </br>
 <button type="button" onclick="buyProductManager()">+1 PM</button>
 <button type="button" onclick="sellProductManager()">-1 PM</button>
 <button type="button" id="buyDevBtn" onclick="buyDeveloper()" style="visibility:hidden">+1 DEV</button>
-<button type="button" id="sellDevBtn"onclick="sellDeveloper()" style="visibility:hidden">-1 DEV</button>
+<button type="button" id="sellDevBtn" onclick="sellDeveloper()" style="visibility:hidden">-1 DEV</button>
 <p>
-<button type="button" id="startProductBtn"onclick="createProduct()" style="visibility:hidden">Create F2P game</button>
-<button type="button" id="relProductBtn"onclick="releaseProduct()" style="visibility:hidden">Release F2P game</button>
-<button type="button" id="canProductBtn"onclick="cancelProduct()" style="visibility:hidden">Cancel F2P game</button>
+<button type="button" id="startProductBtn" onclick="createProduct()" style="visibility:hidden">Create F2P game</button>
+<button type="button" id="relProductBtn" onclick="releaseProduct()" style="visibility:hidden">Release F2P game</button>
+<button type="button" id="canProductBtn" onclick="cancelProduct()" style="visibility:hidden">Cancel F2P game</button>
 <script>
 	setInterval(printEconomy,timer);
 </script>
