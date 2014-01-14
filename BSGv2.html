@@ -59,7 +59,7 @@
 		//update economy
 		bullshit += productManager*productRate;
 		code += developer*developerRate;
-		maintenance = (productManager*1.5) + (developer*3);
+		maintenance = (productManager*2) + (developer*4.5);
 		money += incomeFromProducts;
 		money -= maintenance;
 
@@ -137,7 +137,7 @@
 		if (code > finishedProductCost) {
 			code -= finishedProductCost;
 			var i = arrayOfProduct.length;
-			arrayOfProduct[i] = {"name":"Game "+i,"capital":(Math.floor(Math.random()*1000)+1),"incomeRate":(Math.floor(Math.random()*20)+1),"maintenanceCost":(Math.floor(Math.random()*12)+1)};
+			arrayOfProduct[i] = {"name":"Game "+i,"capital":(Math.floor(Math.random()*1000)+1),"incomeRate":(Math.floor(Math.random()*20)+1),"maintenanceCost":(Math.floor(Math.random()*20)+1)};
 			creatingProduct = false;
 			hasProduct = true;
 			finishedProductCost += 5;
@@ -168,15 +168,6 @@
 		creatingProduct = true;
 	}
 
-	//once idea has been chosen, unlock new resource generator -> developer. Dev makes new source: lines of code
-	//lines of code used to complete ideas
-	//completed ideas give randomised bonus to money and incomeProducts but then increase maintenance cost
-	//after first product, unlock maintenance tech tree (outsourcing)
-	//buying more outsource costs money but reduces maintenance
-	//if product is a successful one when income products > maintenance cost
-
-	//future: ABTest product -> randomise incomeProduct, randomise maintenance cost
-	//product + developer cap -> increase building size to increase population
 </script>
 
 </head>
