@@ -38,16 +38,16 @@
 		updateVisibilityButtons(); //show/hide buttons depending on boolean status
 		if (developerUnlocked == false) {
 			document.getElementById('playerEconomy').innerHTML = "<b>Economy</b></br>Lines of Bullshit: " + bullshit +"</br></p>";
-			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + productManager +" </br></br>Wages Cost: " + maintenance + "</br>";
+			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + productManager +" </br></br>Wages Cost: " + maintenance + " monies.</br>";
 			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +" monies.</br>";
 		}
 		else {
 			document.getElementById('playerEconomy').innerHTML = "<b>Economy</b></br>Lines of Bullshit: " + bullshit +"</br>Lines of Code: " + code +"</p>";
-			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + productManager +" </br>Developers: " + developer + "</br></br>Wages Cost: " + maintenance + "</br>";
-			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +"</br>Next Dev costs: " + developerCost +" bullshit.</br>";
+			document.getElementById('playerGenerators').innerHTML = "<b>Eric GmbH</b></br>Money:  " + money + "</br>Product Managers: " + productManager +" </br>Developers: " + developer + "</br></br>Wages Cost: " + maintenance + " monies.</br>";
+			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +" monies. </br>Next Dev costs: " + developerCost +" bullshit.</br>";
 		}
 		if (hasProduct == true) {
-			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +"</br>Next Dev costs: " + developerCost +" bullshit.</br>" + "Income: " + incomeFromProducts + "</br>";
+			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +" monies. </br>Next Dev costs: " + developerCost +" bullshit.</br>" + "Income: " + incomeFromProducts + "</br>";
 			document.getElementById('productListing').innerHTML = printArrayNicely(arrayOfProduct); //list array
 		}
 	}
@@ -60,6 +60,7 @@
 		bullshit += productManager*productRate;
 		code += developer*developerRate;
 		maintenance = (productManager*1.5) + (developer*3);
+		money += incomeFromProducts;
 		money -= maintenance;
 
 		if (money < 0) {
@@ -148,15 +149,16 @@
 
 	function cancelProduct() {
 		//you should be able to cancel any product you want, for prototype just remove last product
-		if (arrayOfProduct.length > 0) {
-			var i = arrayOfProduct.length;
+		var i = arrayOfProduct.length-1;
+		if (i >= 0) {
+			//alert(JSON.stringify(arrayOfProduct[i].name));
 			//remove the maintenance cost and income rate
 			incomeFromProducts -= arrayOfProduct[i].incomeRate;
 			maintenance -= arrayOfProduct[i].maintenanceCost;
 			//remove from array
-			arrayOfProduct = arrayOfProduct.splice(i,1);
+			arrayOfProduct.splice(i,1);
 			finishedProductCost -= 5;
-		}	
+		}
 	}
 
 	function createProduct() {
@@ -179,15 +181,9 @@
 
 </head>
 <body>
-<p id="playerEconomy"><b>Economy</b></br>
-Lines of Bullshit: 0  </br>
-</p>
+<p id="playerEconomy"></p>
 
-<p id="playerGenerators"><b>Eric GmbH</b> </br>
-Money: 0 </br>
-Product Managers: 0  </br>
-Wages Cost: 0 </br>
-</p>
+<p id="playerGenerators"></p>
 
 <button type="button" onclick="buyProductManager()">+1 PM</button>
 <button type="button" onclick="sellProductManager()">-1 PM</button>
