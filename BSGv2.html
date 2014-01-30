@@ -48,7 +48,12 @@
 		}
 		if (hasProduct == true) {
 			document.getElementById('employeeCostStatus').innerHTML = "Next PM costs: " + productManagerCost +" monies. </br>Next Dev costs: " + developerCost +" bullshit.</br>" + "Income: " + incomeFromProducts + "</br>";
-			document.getElementById('productListing').innerHTML = printArrayNicely(arrayOfProduct); //list array
+			var table = getProductTable(arrayOfProduct);
+			var productListing = document.getElementById('productListing');
+			while (productListing.hasChildNodes()) {
+			    productListing.removeChild(productListing.lastChild);
+			}
+			productListing.appendChild(table); //list array
 		}
 	}
 
@@ -69,11 +74,41 @@
 		}
 	}
 
-	function printArrayNicely(arrayOfProduct) {
-			return JSON.stringify(arrayOfProduct);
+	function getProductTable(arrayOfProduct) {
+		//[ { "name": "Game 0", "capital": 708, "incomeRate": 4, "maintenanceCost": 17 } ]
+		var table = document.createElement('table');
+		for (var i = 0; i < arrayOfProduct.length; i++){
+		    var tr = document.createElement('tr');   
+
+		    tr.setAttribute('id', 'g' + i);
+
+		    var td1 = document.createElement('td');
+		    var td2 = document.createElement('td');
+		    var td3 = document.createElement('td');
+		    var td4 = document.createElement('td');
+
+
+
+		    var text1 = document.createTextNode(arrayOfProduct[i].name);
+		    var text2 = document.createTextNode(arrayOfProduct[i].capital);	    
+		    var text3 = document.createTextNode(arrayOfProduct[i].incomeRate);
+		    var text4 = document.createTextNode(arrayOfProduct[i].maintenanceCost);
+
+		    td1.appendChild(text1);
+		    td2.appendChild(text2);
+		    td3.appendChild(text3);
+		    td4.appendChild(text4);
+		    tr.appendChild(td1);
+		    tr.appendChild(td2);
+		    tr.appendChild(td3);
+		    tr.appendChild(td4);
+
+		    table.appendChild(tr);
+		}
+		return table;
 	}
 
-	function updateVisibilityButtons() {
+	function updateVisibilityButtons() {				
 		if (developerUnlocked == true) {
 			document.getElementById('buyDevBtn').style.visibility = 'visible';
 			document.getElementById('sellDevBtn').style.visibility = 'visible';
@@ -144,6 +179,7 @@
 			//add income and maintenance 
 			incomeFromProducts += arrayOfProduct[i].incomeRate;
 			maintenance += arrayOfProduct[i].maintenanceCost;
+			console.log(arrayOfProduct);
 		}
 	}
 
@@ -184,12 +220,12 @@
 <button type="button" id="startProductBtn" onclick="createProduct()" style="visibility:hidden">Create F2P game</button>
 <button type="button" id="relProductBtn" onclick="releaseProduct()" style="visibility:hidden">Release F2P game</button>
 <button type="button" id="canProductBtn" onclick="cancelProduct()" style="visibility:hidden">Cancel F2P game</button>
-<script>
-	setInterval(printEconomy,timer);
-</script>
 <p id="employeeCostStatus">
 <p id="productStatus">
-<p id="productListing">
-
+<div id="productListing"></div>
+<script>
+	document.getElementById('productListing').addEventListener("click",function(s){console.log(s)});
+	setInterval(printEconomy,timer);
+</script>
 </body>
 </html>
